@@ -1,0 +1,28 @@
+# Data Catalog for Hospital Simulation
+
+# Intermediate outputs (memory-only during simulation)
+hospital_config:
+  type: MemoryDataset
+
+simulation_results:
+  type: MemoryDataset
+
+# Patient-level metrics
+patient_metrics:
+  type: pandas.CSVDataset
+  filepath: data/07_model_output/patient_metrics.csv
+
+# Resource utilization metrics
+utilization_metrics:
+  type: pandas.CSVDataset
+  filepath: data/07_model_output/utilization_metrics.csv
+
+# Summary statistics
+summary_statistics:
+  type: json.JSONDataset
+  filepath: data/08_reporting/summary_statistics.json
+
+# Final output
+final_output:
+  type: json.JSONDataset
+  filepath: data/08_reporting/final_output.json

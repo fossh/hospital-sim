@@ -1,0 +1,44 @@
+# Hospital Simulation Parameters
+# ==============================
+
+# Run identification (overridden by CLI)
+run_id: "local"
+
+# Number of Monte Carlo simulations to run
+num_sims: 10
+
+# Delay between simulations (seconds) - for testing progress tracking
+sim_delay: 0.5
+
+# Hospital Capacity
+# -----------------
+ed_beds: 30
+inpatient_beds: 200
+icu_beds: 20
+operating_rooms: 8
+
+# Patient Arrival Rates (patients per hour)
+# -----------------------------------------
+ed_arrival_rate: 8.0
+scheduled_admission_rate: 2.0
+
+# Service Times (hours)
+# ---------------------
+ed_triage_time: 0.25
+ed_treatment_time: 2.5
+inpatient_los: 72.0  # Average length of stay
+icu_los: 48.0
+surgery_duration: 2.0
+
+# Probabilities
+# -------------
+ed_admission_prob: 0.25
+icu_admission_prob: 0.08
+surgery_prob: 0.15
+
+# Simulation Duration (hours)
+# ---------------------------
+simulation_duration: 168  # 1 week
+
+# Random seed for reproducibility
+random_seed: 42
