@@ -13,7 +13,7 @@ authors = [
     {name = "Hospital Analytics Team"}
 ]
 dependencies = [
-    "kedro>=0.19.0",
+    "kedro>=1.2.0",
     "kedro-datasets>=2.0.0",
     "pandas>=2.0.0",
     "numpy>=1.24.0",
