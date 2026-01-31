@@ -94,11 +94,11 @@ class Hospital:
         self.config = config
         self.rng = np.random.default_rng(config.random_seed)
 
-        # Resources
-        self.ed_beds = simpy.Resource(env, capacity=config.ed_beds)
-        self.inpatient_beds = simpy.Resource(env, capacity=config.inpatient_beds)
-        self.icu_beds = simpy.Resource(env, capacity=config.icu_beds)
-        self.operating_rooms = simpy.Resource(env, capacity=config.operating_rooms)
+        # Resources (using PriorityResource for priority-based queuing)
+        self.ed_beds = simpy.PriorityResource(env, capacity=config.ed_beds)
+        self.inpatient_beds = simpy.PriorityResource(env, capacity=config.inpatient_beds)
+        self.icu_beds = simpy.PriorityResource(env, capacity=config.icu_beds)
+        self.operating_rooms = simpy.PriorityResource(env, capacity=config.operating_rooms)
 
         # Metrics
         self.metrics = HospitalMetrics()
