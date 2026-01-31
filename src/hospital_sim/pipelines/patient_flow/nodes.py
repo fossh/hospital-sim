@@ -399,6 +399,17 @@ def aggregate_utilization_metrics(results: list[dict[str, Any]]) -> pd.DataFrame
     return df
 
 
+def _to_native(value: Any) -> Any:
+    """Convert numpy types to native Python types for JSON serialization."""
+    if isinstance(value, (np.integer, np.int64, np.int32)):
+        return int(value)
+    elif isinstance(value, (np.floating, np.float64, np.float32)):
+        return float(value)
+    elif isinstance(value, np.ndarray):
+        return value.tolist()
+    return value
+
+
 def calculate_summary_statistics(
     patient_metrics: pd.DataFrame,
     utilization_metrics: pd.DataFrame,
@@ -413,31 +424,31 @@ def calculate_summary_statistics(
 
     summary = {
         "run_id": run_id,
-        "num_simulations": patient_metrics["sim_number"].nunique(),
+        "num_simulations": _to_native(patient_metrics["sim_number"].nunique()),
         "total_patients": len(patient_metrics),
         "patients_per_sim": len(patient_metrics) / patient_metrics["sim_number"].nunique(),
         # ED metrics
         "ed_patients": len(ed_patients),
-        "ed_wait_time_mean": ed_patients["ed_wait_time"].mean(),
-        "ed_wait_time_p50": ed_patients["ed_wait_time"].quantile(0.5),
-        "ed_wait_time_p95": ed_patients["ed_wait_time"].quantile(0.95),
-        "ed_treatment_time_mean": ed_patients["ed_treatment_time"].mean(),
+        "ed_wait_time_mean": _to_native(ed_patients["ed_wait_time"].mean()),
+        "ed_wait_time_p50": _to_native(ed_patients["ed_wait_time"].quantile(0.5)),
+        "ed_wait_time_p95": _to_native(ed_patients["ed_wait_time"].quantile(0.95)),
+        "ed_treatment_time_mean": _to_native(ed_patients["ed_treatment_time"].mean()),
         # Admission metrics
         "admission_rate": len(admitted_patients) / len(patient_metrics),
-        "bed_wait_time_mean": admitted_patients["bed_wait_time"].mean(),
-        "bed_wait_time_p95": admitted_patients["bed_wait_time"].quantile(0.95),
-        "inpatient_los_mean": admitted_patients["inpatient_los"].mean(),
+        "bed_wait_time_mean": _to_native(admitted_patients["bed_wait_time"].mean()),
+        "bed_wait_time_p95": _to_native(admitted_patients["bed_wait_time"].quantile(0.95)),
+        "inpatient_los_mean": _to_native(admitted_patients["inpatient_los"].mean()),
         # ICU and surgery
-        "icu_rate": admitted_patients["icu_stay"].mean(),
-        "surgery_rate": admitted_patients["surgery"].mean(),
+        "icu_rate": _to_native(admitted_patients["icu_stay"].mean()),
+        "surgery_rate": _to_native(admitted_patients["surgery"].mean()),
         # Utilization
-        "bed_utilization_mean": utilization_metrics["bed_utilization"].mean(),
-        "bed_utilization_max": utilization_metrics["bed_utilization"].max(),
-        "icu_utilization_mean": utilization_metrics["icu_utilization"].mean(),
-        "icu_utilization_max": utilization_metrics["icu_utilization"].max(),
-        "or_utilization_mean": utilization_metrics["or_utilization"].mean(),
-        "ed_queue_mean": utilization_metrics["ed_queue_length"].mean(),
-        "ed_queue_max": utilization_metrics["ed_queue_length"].max(),
+        "bed_utilization_mean": _to_native(utilization_metrics["bed_utilization"].mean()),
+        "bed_utilization_max": _to_native(utilization_metrics["bed_utilization"].max()),
+        "icu_utilization_mean": _to_native(utilization_metrics["icu_utilization"].mean()),
+        "icu_utilization_max": _to_native(utilization_metrics["icu_utilization"].max()),
+        "or_utilization_mean": _to_native(utilization_metrics["or_utilization"].mean()),
+        "ed_queue_mean": _to_native(utilization_metrics["ed_queue_length"].mean()),
+        "ed_queue_max": _to_native(utilization_metrics["ed_queue_length"].max()),
     }
 
     logger.info(f"[RUN_ID={run_id}] Summary: {summary['patients_per_sim']:.0f} patients/sim, "
